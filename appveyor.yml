@@ -1,0 +1,44 @@
+version: 0.1.{build}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+skip_tags: true
+skip_branch_with_pr: true
+image: Visual Studio 2019
+clone_depth: 1
+build_script:
+- ps: >-
+    $Script:ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop
+
+    Microsoft.PowerShell.Core\Set-StrictMode -Version 1
+
+    $ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
+
+
+    Compress-Archive -Force -CompressionLevel Optimal -DestinationPath 'Sources.zip' -Path '*'
+
+
+    & ./run.ps1 -AppveyorBuild
+
+
+    Compress-Archive -Force -CompressionLevel Optimal -DestinationPath '.out/Binaries.zip' -Path '.out/bin/HarinezumiSama.Benchmarks.Executor/AnyCPU/Release/net5.0/*'
+
+
+    Compress-Archive -Force -CompressionLevel Optimal -DestinationPath '.out/Benchmarks.zip' -Path '.out/benchmarks/*'
+test: off
+artifacts:
+- path: Sources.zip
+  name: Sources
+- path: .out/Binaries.zip
+  name: Binaries
+- path: .out/Benchmarks.zip
+  name: Benchmarks
+notifications:
+- provider: Email
+  to:
+  - vitalii.maklai@gmail.com
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: false

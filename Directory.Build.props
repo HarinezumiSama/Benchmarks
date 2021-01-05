@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+    <PropertyGroup>
+        <Configurations>Release</Configurations>
+        <Optimize>true</Optimize>
+        <LangVersion>9.0</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <__RootSolutionOutputPathBase>$(SolutionDir)\.out</__RootSolutionOutputPathBase>
+        <__RootSolutionOutputPath>$([System.IO.Path]::GetFullPath($(__RootSolutionOutputPathBase)))</__RootSolutionOutputPath>
+        <OutputPath>$(__RootSolutionOutputPath)\bin\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutputPath>
+        <BaseIntermediateOutputPath>$(__RootSolutionOutputPath)\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Version>0.0.0</Version>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageVersion>$(Version)</PackageVersion>
+        <AssemblyVersion>$(Version).0</AssemblyVersion>
+        <FileVersion>$(AssemblyVersion)</FileVersion>
+        <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    </PropertyGroup>
+</Project>
