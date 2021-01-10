@@ -1,5 +1,10 @@
 ﻿# HarinezumiSama Benchmarks
 
+## Build Status
+[![Build status](https://ci.appveyor.com/api/projects/status/lssn1v7ssqqnjjkl?svg=true)](https://ci.appveyor.com/project/HarinezumiSama/Benchmarks)
+
+## Description
+
 Sets of benchmarks for .NET Framework, .NET Core, and .NET implemented using [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet).
 
 The main goal of this project is to measure relative performance of different ways of producing the same result on different .NET implementations/versions.
@@ -31,9 +36,6 @@ public string FormatValuesUsingStringFormatMethod()
 Benchmark Set | Benchmarks | Description
 :-------------|:-----------|:-----------
 StringFormatting | <ul><li>StringFormattingUsingStringValuesBenchmarks</li><li>StringFormattingUsingVariousValuesBenchmarks</li></ul> | Compares various ways of building a string from string literals and variables.
-
-## Build Status
-[![Build status](https://ci.appveyor.com/api/projects/status/lssn1v7ssqqnjjkl?svg=true)](https://ci.appveyor.com/project/HarinezumiSama/Benchmarks)
 
 ## How to Build and Run
 
