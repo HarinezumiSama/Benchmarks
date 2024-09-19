@@ -6,9 +6,10 @@ using BenchmarkDotNet.Jobs;
 namespace HarinezumiSama.Benchmarks.StringFormatting
 {
     [SimpleJob(RuntimeMoniker.Net48)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp21)]
     [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net60)]
+    [SimpleJob(RuntimeMoniker.Net70)]
+    [SimpleJob(RuntimeMoniker.Net80)]
     [MemoryDiagnoser]
     [ArtifactsPath(@"..\..\..\..\..\benchmarks\" + nameof(StringFormattingBenchmarks))]
     [IterationCount(10)]

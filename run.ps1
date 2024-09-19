@@ -67,14 +67,18 @@ begin
 process
 {
     [ValidateNotNullOrEmpty()] [string] $solutionFilePath = 'HarinezumiSama.Benchmarks.sln' | Get-ProjectItemFullPath
-    [string[]] $outputDirectories = '.out', '.benchmarks' | Get-ProjectItemFullPath;
+    [string[]] $outputDirectories = @('.out', '.benchmarks') | Get-ProjectItemFullPath
 
     [string] $executableProjectName = 'HarinezumiSama.Benchmarks.Executor'
 
     [ValidateNotNullOrEmpty()] [string] $executableFilePath = `
-        ".out/bin/$executableProjectName/AnyCPU/Release/net5.0/$executableProjectName.exe" | Get-ProjectItemFullPath
+        ".out/bin/$executableProjectName/AnyCPU/Release/net8.0/$executableProjectName.exe" | Get-ProjectItemFullPath
 
     [ValidateNotNullOrEmpty()] [string] $executableDirectoryPath = [Path]::GetDirectoryName($executableFilePath)
+
+    Write-MajorSeparator
+    Write-ActionTitle '.NET SDKs'
+    dotnet --list-sdks
 
     if ($Clean)
     {
