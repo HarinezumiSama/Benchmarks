@@ -1,11 +1,10 @@
 ﻿using NUnit.Framework;
 
-namespace HarinezumiSama.Benchmarks.StringFormatting.Tests
+namespace HarinezumiSama.Benchmarks.StringFormatting.Tests;
+
+[TestFixture]
+internal abstract class StringFormattingBenchmarksTestsBase<T>
+    where T : StringFormattingBenchmarks, new()
 {
-    [TestFixture]
-    internal abstract class StringFormattingBenchmarksTestsBase<T>
-        where T : StringFormattingBenchmarks, new()
-    {
-        protected static T CreateTestee() => new();
-    }
+    protected static T CreateTestee() => new();
 }

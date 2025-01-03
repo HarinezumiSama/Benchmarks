@@ -63,24 +63,41 @@ begin
             return $result
         }
     }
+
+    function Test-ExitCode
+    {
+        [CmdletBinding(PositionalBinding = $false)]
+        param ()
+        process
+        {
+            if ($LASTEXITCODE -ne 0)
+            {
+                throw "The command failed with exit code $LASTEXITCODE."
+            }
+        }
+    }
 }
 process
 {
     [ValidateNotNullOrEmpty()] [string] $solutionFilePath = 'HarinezumiSama.Benchmarks.sln' | Get-ProjectItemFullPath
-    [string[]] $outputDirectories = '.out', '.benchmarks' | Get-ProjectItemFullPath;
+    [string[]] $outputDirectories = @('.out', '.benchmarks') | Get-ProjectItemFullPath
 
     [string] $executableProjectName = 'HarinezumiSama.Benchmarks.Executor'
 
     [ValidateNotNullOrEmpty()] [string] $executableFilePath = `
-        ".out/bin/$executableProjectName/AnyCPU/Release/net5.0/$executableProjectName.exe" | Get-ProjectItemFullPath
+        ".out/bin/AnyCPU/Release/$executableProjectName/net9.0/$executableProjectName.exe" | Get-ProjectItemFullPath
 
     [ValidateNotNullOrEmpty()] [string] $executableDirectoryPath = [Path]::GetDirectoryName($executableFilePath)
+
+    Write-MajorSeparator
+    Write-ActionTitle '.NET SDKs'
+    dotnet --list-sdks
 
     if ($Clean)
     {
         Write-MajorSeparator
         Write-ActionTitle "Cleaning build output for the solution ""$solutionFilePath""."
-        dotnet clean """$solutionFilePath""" 2>&1
+        dotnet clean --verbosity normal """$solutionFilePath""" 2>&1
 
         Write-Host ''
         Write-ActionTitle 'Deleting output directories (if any).'
@@ -90,14 +107,15 @@ process
             {
                 Write-Host ''
                 Write-ActionTitle "Deleting output directory ""$outputDirectory""."
-                Remove-Item -Path $outputDirectory -Recurse -Force -ErrorAction SilentlyContinue
+                Remove-Item -Path $outputDirectory -Exclude '.gitkeep' -Recurse -Force -ErrorAction SilentlyContinue
             }
         }
     }
 
     Write-MajorSeparator
     Write-ActionTitle "Restoring packages for the solution ""$solutionFilePath""."
-    dotnet restore """$solutionFilePath""" 2>&1
+    dotnet restore --verbosity normal """$solutionFilePath""" 2>&1
+    Test-ExitCode
 
     [string[]] $buildCommandExtraArguments = @()
     if ($AppveyorBuild)
@@ -118,11 +136,26 @@ process
 
     Write-MajorSeparator
     Write-ActionTitle "Building the solution ""$solutionFilePath""."
-    dotnet build """$solutionFilePath""" --no-incremental --no-restore @buildCommandExtraArguments 2>&1
+    dotnet build --verbosity normal """$solutionFilePath""" --no-incremental --no-restore @buildCommandExtraArguments 2>&1
+    Test-ExitCode
 
     Write-MajorSeparator
     Write-ActionTitle "Running tests for the solution ""$solutionFilePath""."
-    dotnet test """$solutionFilePath""" --no-build 2>&1
+    dotnet test --verbosity normal """$solutionFilePath""" --no-build --logger:console --logger:html --logger:trx 2>&1
+    Test-ExitCode
+
+    Write-MajorSeparator
+    Write-ActionTitle "Listing benchmarks using ""$executableFilePath""."
+    Push-Location $executableDirectoryPath
+    try
+    {
+        & $executableFilePath --list flat 2>&1
+        Test-ExitCode
+    }
+    finally
+    {
+        Pop-Location
+    }
 
     if ($NoBenchmarking)
     {
@@ -138,6 +171,7 @@ process
     try
     {
         & $executableFilePath 2>&1
+        Test-ExitCode
     }
     finally
     {
