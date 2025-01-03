@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+        <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageVersion Include="BenchmarkDotNet" Version="0.14.0"/>
+        <PackageVersion Include="NUnit" Version="3.14.0"/>
+        <PackageVersion Include="NUnit3TestAdapter" Version="3.17.0"/>
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1"/>
+    </ItemGroup>
+</Project>
