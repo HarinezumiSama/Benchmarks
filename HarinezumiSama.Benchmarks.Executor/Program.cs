@@ -9,6 +9,7 @@ using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using HarinezumiSama.Benchmarks.Executor;
+using HarinezumiSama.Benchmarks.Omnifactotum;
 using HarinezumiSama.Benchmarks.StringFormatting;
 
 try
@@ -50,7 +51,8 @@ try
     var summaries = BenchmarkSwitcher
         .FromAssemblies(
         [
-            typeof(StringFormattingBenchmarks).Assembly
+            typeof(StringFormattingBenchmarksMarker).Assembly,
+            typeof(OmnifactotumBenchmarksMarker).Assembly
         ])
         .RunAll(config, args)
         .ToArray();

@@ -2,17 +2,18 @@
 
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFrameworks>net48;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit3TestAdapter"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\HarinezumiSama.Benchmarks.Common\HarinezumiSama.Benchmarks.Common.csproj"/>
         <ProjectReference Include="..\HarinezumiSama.Benchmarks.Omnifactotum\HarinezumiSama.Benchmarks.Omnifactotum.csproj"/>
-        <ProjectReference Include="..\HarinezumiSama.Benchmarks.StringFormatting\HarinezumiSama.Benchmarks.StringFormatting.csproj"/>
     </ItemGroup>
 </Project>

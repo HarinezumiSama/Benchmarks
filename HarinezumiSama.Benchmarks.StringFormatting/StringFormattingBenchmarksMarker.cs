@@ -1,0 +1,3 @@
+﻿namespace HarinezumiSama.Benchmarks.StringFormatting;
+
+public static class StringFormattingBenchmarksMarker;
