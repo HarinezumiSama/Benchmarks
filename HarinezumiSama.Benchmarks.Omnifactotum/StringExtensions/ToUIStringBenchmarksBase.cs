@@ -72,7 +72,7 @@ public abstract class ToUIStringBenchmarksBase(int length)
         => Implementation.F1_UsingStackOrHeapAllocationAndOnePreSearch.ToUIString(InputValue);
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    private static class Implementation
+    internal static class Implementation
     {
         internal static class F0_StringReplaceAndConcat
         {

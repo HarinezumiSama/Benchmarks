@@ -8,8 +8,9 @@ using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
+using HarinezumiSama.Benchmarks.Common;
 using HarinezumiSama.Benchmarks.Executor;
-using HarinezumiSama.Benchmarks.Omnifactotum;
+using HarinezumiSama.Benchmarks.Omnifactotum.StringExtensions;
 using HarinezumiSama.Benchmarks.StringFormatting;
 
 try
@@ -23,7 +24,7 @@ try
         DefaultExporters.Plain,
         DefaultExporters.Html,
         DefaultExporters.Csv,
-        DefaultExporters.JsonFull,
+        //// DefaultExporters.JsonFull,
         MarkdownExporter.GitHub
         //// DefaultExporters.RPlot
     ];
@@ -49,11 +50,10 @@ try
         .WithArtifactsPath(artifactsPath);
 
     var summaries = BenchmarkSwitcher
-        .FromAssemblies(
-        [
-            typeof(StringFormattingBenchmarksMarker).Assembly,
-            typeof(OmnifactotumBenchmarksMarker).Assembly
-        ])
+        .FromTypes([])
+        //// .With(BenchmarkHelper.GetAllBenchmarkTypes<StringFormattingBenchmarks>())
+        //// .With(BenchmarkHelper.GetAllBenchmarkTypes<ToUIStringBenchmarksBase>())
+        .With(BenchmarkHelper.GetAllBenchmarkTypes<ToSecuredUIStringBenchmarksBase>())
         .RunAll(config, args)
         .ToArray();
 
