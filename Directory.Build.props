@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project>
+<Project InitialTargets="__X_Initialize">
     <PropertyGroup>
         <!-- CS1591: Missing XML comment for publicly visible type or member :: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-messages/cs1591 -->
         <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -21,6 +21,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <__X_LogCustomProperties>false</__X_LogCustomProperties>
+        <__X_LogStandardProperties>true</__X_LogStandardProperties>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <__X_SolutionDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)'))</__X_SolutionDir>
         <__X_RootSolutionOutputPath>$([MSBuild]::NormalizeDirectory('$(__X_SolutionDir)', '.out'))</__X_RootSolutionOutputPath>
         <__X_TestResultsSubdirectory>TestResults</__X_TestResultsSubdirectory>
@@ -28,12 +33,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <__RootSolutionOutputPathBase>$(SolutionDir)\.out</__RootSolutionOutputPathBase>
-        <__RootSolutionOutputPath>$([System.IO.Path]::GetFullPath($(__RootSolutionOutputPathBase)))</__RootSolutionOutputPath>
         <OutputPath>$([MSBuild]::NormalizeDirectory('$(__X_RootSolutionOutputPath)', 'bin', '$(Platform)', '$(Configuration)', '$(MSBuildProjectName)'))</OutputPath>
         <BaseIntermediateOutputPath>$([MSBuild]::NormalizeDirectory('$(__X_RootSolutionOutputPath)', 'obj', '$(MSBuildProjectName)'))</BaseIntermediateOutputPath>
-        <VSTestResultsDirectory>$([MSBuild]::NormalizeDirectory('$(__RootSolutionOutputPathBase)', '$(__X_TestResultsSubdirectory)'))</VSTestResultsDirectory>
-        <__X_BenchmarkResultsDirectory>$([MSBuild]::NormalizeDirectory('$(__RootSolutionOutputPathBase)', '$(__X_BenchmarkResultsSubdirectory)'))</__X_BenchmarkResultsDirectory>
+        <PackageOutputPath>$([MSBuild]::NormalizeDirectory('$(__X_RootSolutionOutputPath)', 'NuGet'))</PackageOutputPath>
+        <VSTestResultsDirectory>$([MSBuild]::NormalizeDirectory('$(OutputPath)', '$(__X_TestResultsSubdirectory)'))</VSTestResultsDirectory>
+        <__X_BenchmarkResultsDirectory>$([MSBuild]::NormalizeDirectory('$(__X_RootSolutionOutputPath)', '$(__X_BenchmarkResultsSubdirectory)'))</__X_BenchmarkResultsDirectory>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -52,4 +56,80 @@
         <FileVersion>$(AssemblyVersion)</FileVersion>
         <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
     </PropertyGroup>
+
+    <Target Name="__X_Initialize">
+        <PropertyGroup>
+            <__X_MessagePrefix>$(MSBuildProjectName):$(TargetFramework):$(Configuration):$(Platform)</__X_MessagePrefix>
+        </PropertyGroup>
+
+        <Message Importance="high" Text="[$(__X_MessagePrefix)] Target '__X_Initialize' is being executed." />
+
+        <ItemGroup>
+            <__X_SolutionFiles Include="$(__X_SolutionDir)\*.sln" />
+        </ItemGroup>
+
+        <PropertyGroup>
+            <__X_SolutionName>@(__X_SolutionFiles->'%(Filename)')</__X_SolutionName>
+        </PropertyGroup>
+
+        <!-- Log internal properties -->
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogCustomProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] __X_SolutionDir = &quot;$(__X_SolutionDir)&quot;" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogCustomProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] __X_SolutionName = &quot;$(__X_SolutionName)&quot;" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogCustomProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] __X_SolutionFiles.Count = @(__X_SolutionFiles->Count())" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogCustomProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] __X_SolutionFiles = [&quot;@(__X_SolutionFiles, '&quot;, &quot;')&quot;]" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogCustomProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] __X_BenchmarkResultsDirectory = &quot;$(__X_BenchmarkResultsDirectory)&quot;" />
+
+        <Error
+            Condition="'@(__X_SolutionFiles->Count())' != '1'"
+            Text="[$(__X_MessagePrefix)] Exactly 1 solution file must be present in &quot;$(__X_SolutionDir)&quot;. Found: @(__X_SolutionFiles->Count())." />
+
+        <Error
+            Condition="'$(__X_SolutionName)' == ''"
+            Text="[$(__X_MessagePrefix)] The solution name could not be determined. Check configuration."/>
+
+        <PropertyGroup>
+            <RunSettingsFilePath>$([MSBuild]::NormalizePath('$(__X_SolutionDir)', '$(__X_SolutionName).runsettings'))</RunSettingsFilePath>
+        </PropertyGroup>
+
+        <Error
+            Condition="!$([System.IO.File]::Exists('$(RunSettingsFilePath)'))"
+            Text="[$(__X_MessagePrefix)] Test run settings file &quot;$(RunSettingsFilePath)&quot; is not found."/>
+
+        <!-- Log standard properties -->
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogStandardProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] NETCoreSdkVersion = &quot;$(NETCoreSdkVersion)&quot;" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogStandardProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] BaseIntermediateOutputPath = &quot;$(BaseIntermediateOutputPath)&quot;" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogStandardProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] OutputPath = &quot;$(OutputPath)&quot;" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogStandardProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] AssemblyVersion = &quot;$(AssemblyVersion)&quot;" />
+        <Message
+            Importance="high"
+            Condition="'$(__X_LogStandardProperties)' == 'true'"
+            Text="[$(__X_MessagePrefix)] InformationalVersion = &quot;$(InformationalVersion)&quot;" />
+    </Target>
 </Project>

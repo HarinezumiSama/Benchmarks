@@ -79,10 +79,14 @@ begin
 }
 process
 {
-    [ValidateNotNullOrEmpty()] [string] $solutionFilePath = 'HarinezumiSama.Benchmarks.sln' | Get-ProjectItemFullPath
-    [string[]] $outputDirectories = @('.out', '.benchmarks') | Get-ProjectItemFullPath
-
     [string] $executableProjectName = 'HarinezumiSama.Benchmarks.Executor'
+
+    [ValidateNotNullOrEmpty()] [string] $solutionFilePath = 'HarinezumiSama.Benchmarks.sln' | Get-ProjectItemFullPath
+
+    [ValidateNotNullOrEmpty()] [string] $benchmarkResultsDirectoryPath = '.out/Benchmarks' | Get-ProjectItemFullPath
+    [Environment]::SetEnvironmentVariable('HARINEZUMISAMA_BENCHMARKS_RESULTS_DIRECTORY', $benchmarkResultsDirectoryPath, [EnvironmentVariableTarget]::Process) | Out-Null
+
+    [string[]] $outputDirectories = @(('.out' | Get-ProjectItemFullPath), $benchmarkResultsDirectoryPath)
 
     [ValidateNotNullOrEmpty()] [string] $executableFilePath = `
         ".out/bin/AnyCPU/Release/$executableProjectName/net9.0/$executableProjectName.exe" | Get-ProjectItemFullPath

@@ -5,61 +5,105 @@ using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Loggers;
-using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
+using HarinezumiSama.Benchmarks.Common;
 using HarinezumiSama.Benchmarks.Executor;
-using HarinezumiSama.Benchmarks.Omnifactotum;
+using HarinezumiSama.Benchmarks.Omnifactotum.StringExtensions;
 using HarinezumiSama.Benchmarks.StringFormatting;
 
 try
 {
+    var isSpecialCommand = args.Select(static s => s.ToLowerInvariant()).ToArray() is
+        ["--help"] or ["--version"] or ["--info"] or ["--list", "flat" or "tree"];
+
+    var resultsDirectoryEnvironmentVariableValue = Environment.GetEnvironmentVariable(InternalHelper.ResultsDirectoryEnvironmentVariableName);
+
+    if (!isSpecialCommand)
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"Command line: {Environment.CommandLine}");
+        Console.WriteLine($"[ENV] {InternalHelper.ResultsDirectoryEnvironmentVariableName} = '{resultsDirectoryEnvironmentVariableValue}'");
+        Console.ResetColor();
+        Console.WriteLine();
+    }
+
     var defaultConfig = DefaultConfig.Instance;
 
-    IColumn[] columns = [BaselineColumn.Default, StatisticColumn.Mean, StatisticColumn.Median, StatisticColumn.StdDev];
+    IColumn[] columns =
+    [
+        // CategoriesColumn.Default,
+        // LogicalGroupColumn.Default,
+        BaselineColumn.Default,
+        StatisticColumn.Mean,
+        StatisticColumn.Median,
+        StatisticColumn.StdDev
+    ];
+
+    //// var columnProviders = defaultConfig.GetColumnProviders().ToArray();
+    IColumnProvider[] columnProviders =
+    [
+        //// DefaultColumnProviders.Descriptor,
+        CustomDescriptorColumnProvider.Instance,
+        DefaultColumnProviders.Job,
+        DefaultColumnProviders.Statistics,
+        DefaultColumnProviders.Params,
+        DefaultColumnProviders.Metrics
+    ];
+
+    var analysers = defaultConfig.GetAnalysers().ToArray();
 
     IExporter[] exporters =
     [
         DefaultExporters.Plain,
         DefaultExporters.Html,
         DefaultExporters.Csv,
-        DefaultExporters.JsonFull,
+        //// DefaultExporters.JsonFull,
         MarkdownExporter.GitHub
         //// DefaultExporters.RPlot
     ];
 
     var validators = defaultConfig.GetValidators().Append(ReturnValueValidator.FailOnError).Distinct().ToArray();
 
-    var artifactsPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location)!, """..\..\..\..\..\Benchmarks"""));
+    var resultsDirectoryPath = string.IsNullOrWhiteSpace(resultsDirectoryEnvironmentVariableValue)
+        ? Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location)!, ".benchmarks")
+        : resultsDirectoryEnvironmentVariableValue;
+
+    var resolvedResultsDirectoryPath = Path.GetFullPath(resultsDirectoryPath);
 
     var config = ManualConfig.CreateEmpty()
-        .AddLogger(DynamicallyPrefixedLogger.CreateTimestampPrefixedLogger(ConsoleLogger.Default))
-        .AddColumnProvider(defaultConfig.GetColumnProviders().ToArray())
+        .AddLogger(isSpecialCommand ? InternalHelper.DefaultLogger : InternalHelper.Logger)
+        .AddColumnProvider(columnProviders)
         .AddColumn(columns)
         .AddExporter(exporters)
-        .AddAnalyser(defaultConfig.GetAnalysers().ToArray())
+        .AddAnalyser(analysers)
         .AddValidator(validators)
-        .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest))
+        ////.WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest))
+        .WithOrderer(new CustomBenchmarkOrderer())
         .WithCategoryDiscoverer(defaultConfig.CategoryDiscoverer!)
         .WithUnionRule(ConfigUnionRule.Union)
         .WithCultureInfo(defaultConfig.CultureInfo!)
-        .WithOptions(defaultConfig.Options)
+        .WithOptions(defaultConfig.Options | ConfigOptions.DisableParallelBuild | ConfigOptions.JoinSummary)
         .WithSummaryStyle(defaultConfig.SummaryStyle)
         .WithBuildTimeout(defaultConfig.BuildTimeout)
-        .WithArtifactsPath(artifactsPath);
+        .WithArtifactsPath(resolvedResultsDirectoryPath);
+
+    if (!isSpecialCommand)
+    {
+        InternalHelper.Logger.WriteLineInfo($"Benchmark results directory: {resolvedResultsDirectoryPath}");
+    }
 
     var summaries = BenchmarkSwitcher
-        .FromAssemblies(
-        [
-            typeof(StringFormattingBenchmarksMarker).Assembly,
-            typeof(OmnifactotumBenchmarksMarker).Assembly
-        ])
+        .FromTypes([])
+        .With(BenchmarkHelper.GetAllBenchmarkTypes<StringFormattingBenchmarks>())
+        .With(BenchmarkHelper.GetAllBenchmarkTypes<ToUIStringBenchmarks>())
+        .With(BenchmarkHelper.GetAllBenchmarkTypes<ToSecuredUIStringBenchmarks>())
         .RunAll(config, args)
         .ToArray();
 
     if (summaries.Length == 0)
     {
-        if (args is ["--list", ..])
+        if (isSpecialCommand)
         {
             return 0;
         }

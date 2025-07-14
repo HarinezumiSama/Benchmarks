@@ -9,11 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="BenchmarkDotNet" Version="0.14.0"/>
+        <PackageVersion Include="BenchmarkDotNet" Version="0.15.2"/>
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1"/>
         <PackageVersion Include="NUnit" Version="3.14.0"/>
         <PackageVersion Include="NUnit3TestAdapter" Version="3.17.0"/>
-        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1"/>
-        <PackageVersion Include="System.Collections.Immutable" Version="8.0.0"/>
-        <PackageVersion Include="System.Reflection.Metadata" Version="8.0.0"/>
+        <PackageVersion Include="Omnifactotum" Version="[0.13.0]"/>
+        <PackageVersion Include="System.Collections.Immutable" Version="9.0.0"/>
+        <PackageVersion Include="System.Reflection.Metadata" Version="9.0.0"/>
     </ItemGroup>
 </Project>

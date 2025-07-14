@@ -6,12 +6,13 @@ using BenchmarkDotNet.Jobs;
 namespace HarinezumiSama.Benchmarks.StringFormatting;
 
 [SimpleJob(RuntimeMoniker.Net48)]
-[SimpleJob(RuntimeMoniker.NetCoreApp31)]
-[SimpleJob(RuntimeMoniker.Net50)]
-[SimpleJob(RuntimeMoniker.Net60)]
-[SimpleJob(RuntimeMoniker.Net70)]
-[SimpleJob(RuntimeMoniker.Net80)]
+// [SimpleJob(RuntimeMoniker.NetCoreApp31)]
+// [SimpleJob(RuntimeMoniker.Net50)]
+// [SimpleJob(RuntimeMoniker.Net60)]
+// [SimpleJob(RuntimeMoniker.Net70)]
+// [SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net90)]
+[BenchmarkCategory(nameof(StringFormattingBenchmarks))]
 [MemoryDiagnoser]
 [IterationCount(1)]
 [WarmupCount(3)]

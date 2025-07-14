@@ -16,12 +16,13 @@ namespace HarinezumiSama.Benchmarks.Omnifactotum.StringExtensions;
 //// [SimpleJob(RuntimeMoniker.Net70)]
 [SimpleJob(RuntimeMoniker.Net80)]
 //// [SimpleJob(RuntimeMoniker.Net90)]
-[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByJob, BenchmarkLogicalGroupRule.ByParams)]
-[Orderer(SummaryOrderPolicy.Method, MethodOrderPolicy.Alphabetical)]
+[BenchmarkCategory(nameof(ToUIStringBenchmarks))]
+////[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByJob, BenchmarkLogicalGroupRule.ByParams)]
+////[Orderer(SummaryOrderPolicy.Method, MethodOrderPolicy.Alphabetical)]
 [MinIterationTime(120)]
 [MemoryDiagnoser]
 [SuppressMessage("ReSharper", "ReplaceSliceWithRangeIndexer", Justification = "Multiple target frameworks.")]
-public abstract class ToUIStringBenchmarksBase(int length)
+public abstract class ToUIStringBenchmarks(int length)
 {
     private const string NullValueRepresentation = "null";
     private const char DoubleQuoteChar = '"';
@@ -72,7 +73,7 @@ public abstract class ToUIStringBenchmarksBase(int length)
         => Implementation.F1_UsingStackOrHeapAllocationAndOnePreSearch.ToUIString(InputValue);
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    private static class Implementation
+    internal static class Implementation
     {
         internal static class F0_StringReplaceAndConcat
         {
