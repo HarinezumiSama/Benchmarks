@@ -7,6 +7,9 @@
 
         <!-- MSB3277: Found conflicts between different versions of 'assembly' that could not be resolved :: https://learn.microsoft.com/en-us/visualstudio/msbuild/errors/msb3277 -->
         <WarningsAsErrors>$(WarningsAsErrors);MSB3277</WarningsAsErrors>
+
+        <!-- CA1822: Mark members as static -->
+        <NoWarn>$(NoWarn);CA1822</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -9,16 +9,14 @@ using HarinezumiSama.Benchmarks.Common;
 
 namespace HarinezumiSama.Benchmarks.Omnifactotum.StringExtensions;
 
-//// [SimpleJob(RuntimeMoniker.Net48)]
-//// [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-//// [SimpleJob(RuntimeMoniker.Net50)]
-//// [SimpleJob(RuntimeMoniker.Net60)]
-//// [SimpleJob(RuntimeMoniker.Net70)]
+[SimpleJob(RuntimeMoniker.Net48)]
+[SimpleJob(RuntimeMoniker.NetCoreApp31)]
+[SimpleJob(RuntimeMoniker.Net50)]
+[SimpleJob(RuntimeMoniker.Net60)]
+[SimpleJob(RuntimeMoniker.Net70)]
 [SimpleJob(RuntimeMoniker.Net80)]
-//// [SimpleJob(RuntimeMoniker.Net90)]
+[SimpleJob(RuntimeMoniker.Net90)]
 [BenchmarkCategory(nameof(ToUIStringBenchmarks))]
-////[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByJob, BenchmarkLogicalGroupRule.ByParams)]
-////[Orderer(SummaryOrderPolicy.Method, MethodOrderPolicy.Alphabetical)]
 [MinIterationTime(120)]
 [MemoryDiagnoser]
 [SuppressMessage("ReSharper", "ReplaceSliceWithRangeIndexer", Justification = "Multiple target frameworks.")]

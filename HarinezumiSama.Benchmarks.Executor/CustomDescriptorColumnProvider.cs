@@ -21,7 +21,7 @@ internal sealed class CustomDescriptorColumnProvider : IColumnProvider
             return [];
         }
 
-        var fullNames = summary.BenchmarksCases.Select(@case => @case.Descriptor.Type.GetFullName()).ToArray();
+        var fullNames = summary.BenchmarksCases.Select(static @case => @case.Descriptor.Type.GetFullName()).ToArray();
 
         var commonPrefixLength = 0;
         while (true)
@@ -42,7 +42,7 @@ internal sealed class CustomDescriptorColumnProvider : IColumnProvider
                             Name = s.Substring(length)
                         };
                     })
-                .GroupBy(item => item.Prefix, StringComparer.Ordinal)
+                .GroupBy(static item => item.Prefix, StringComparer.Ordinal)
                 .ToArray();
 
             if (groupings.Length > 1)

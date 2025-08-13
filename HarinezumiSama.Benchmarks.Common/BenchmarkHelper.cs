@@ -46,7 +46,7 @@ public static class BenchmarkHelper
 
         var types = initialType.Assembly
             .GetTypes()
-            .Where(static type => type is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false })
+            .Where(type => type is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false } && type != initialType)
             .ToArray();
 
         foreach (var type in types)

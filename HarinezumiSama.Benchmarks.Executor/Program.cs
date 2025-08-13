@@ -40,7 +40,7 @@ try
         StatisticColumn.StdDev
     ];
 
-    //// var columnProviders = defaultConfig.GetColumnProviders().ToArray();
+    // var columnProviders = defaultConfig.GetColumnProviders().ToArray();
     IColumnProvider[] columnProviders =
     [
         //// DefaultColumnProviders.Descriptor,
@@ -98,6 +98,7 @@ try
         .With(BenchmarkHelper.GetAllBenchmarkTypes<StringFormattingBenchmarks>())
         .With(BenchmarkHelper.GetAllBenchmarkTypes<ToUIStringBenchmarks>())
         .With(BenchmarkHelper.GetAllBenchmarkTypes<ToSecuredUIStringBenchmarks>())
+        .With(BenchmarkHelper.GetAllBenchmarkTypes<RegexBenchmarks>())
         .RunAll(config, args)
         .ToArray();
 

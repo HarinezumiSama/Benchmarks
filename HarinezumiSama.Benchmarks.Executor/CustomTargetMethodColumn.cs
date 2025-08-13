@@ -32,7 +32,11 @@ internal sealed class CustomTargetMethodColumn : IColumn
 
     public string Legend => string.Empty;
 
-    public string GetValue(Summary summary, BenchmarkCase benchmarkCase) => benchmarkCase.Descriptor.Type.GetFullName().Substring(_commonPrefixLength);
+    public string GetValue(Summary summary, BenchmarkCase benchmarkCase)
+        => string.Concat(
+            benchmarkCase.Descriptor.Type.GetFullName().AsSpan(_commonPrefixLength),
+            [Type.Delimiter],
+            benchmarkCase.Descriptor.WorkloadMethod.Name);
 
     public string GetValue(Summary summary, BenchmarkCase benchmarkCase, SummaryStyle style) => GetValue(summary, benchmarkCase);
 

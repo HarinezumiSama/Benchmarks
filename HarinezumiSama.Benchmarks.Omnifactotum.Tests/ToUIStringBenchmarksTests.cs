@@ -6,12 +6,12 @@ namespace HarinezumiSama.Benchmarks.Omnifactotum.Tests;
 
 [TestFixture(TypeArgs = [typeof(ToUIStringEmptyStringValueBenchmarks)])]
 [TestFixture(TypeArgs = [typeof(ToUIStringSingleCharValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToUIStringFewCharsValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToUIStringExtraShortValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToUIStringShortValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToUIStringLongValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToUIStringExtraLongValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToUIStringHugeValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToUIStringFewCharsValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToUIStringExtraShortValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToUIStringShortValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToUIStringLongValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToUIStringExtraLongValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToUIStringHugeValueBenchmarks)])]
 public sealed class ToUIStringBenchmarksTests<TBenchmark>
     where TBenchmark : ToUIStringBenchmarks, new()
 {

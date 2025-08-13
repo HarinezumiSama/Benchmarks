@@ -3,7 +3,6 @@ using BenchmarkDotNet.Attributes;
 
 namespace HarinezumiSama.Benchmarks.StringFormatting;
 
-[InvocationCount(250_000)]
 public class StringFormattingUsingValuesBenchmarks : StringFormattingBenchmarks
 {
     [Benchmark(Baseline = true)]

@@ -6,12 +6,12 @@ namespace HarinezumiSama.Benchmarks.Omnifactotum.Tests;
 
 [TestFixture(TypeArgs = [typeof(ToSecuredUIStringEmptyStringValueBenchmarks)])]
 [TestFixture(TypeArgs = [typeof(ToSecuredUIStringSingleCharValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToSecuredUIStringFewCharsValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToSecuredUIStringExtraShortValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToSecuredUIStringShortValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToSecuredUIStringLongValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToSecuredUIStringExtraLongValueBenchmarks)])]
-// [TestFixture(TypeArgs = [typeof(ToSecuredUIStringHugeValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToSecuredUIStringFewCharsValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToSecuredUIStringExtraShortValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToSecuredUIStringShortValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToSecuredUIStringLongValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToSecuredUIStringExtraLongValueBenchmarks)])]
+[TestFixture(TypeArgs = [typeof(ToSecuredUIStringHugeValueBenchmarks)])]
 public sealed class ToSecuredUIStringBenchmarksTests<TBenchmark>
     where TBenchmark : ToSecuredUIStringBenchmarks, new()
 {
